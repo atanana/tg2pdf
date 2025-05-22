@@ -12,7 +12,7 @@ class TelegramDownloader:
         Args:
             api_id (int): Telegram API ID
             api_hash (str): Telegram API Hash
-            session_name (str, optional): Name for the session file. Defaults to 'session_name'.
+            session_name (str, optional): Name for the session file. Defaults to 'anon'.
         """
         self.api_id = api_id
         self.api_hash = api_hash
