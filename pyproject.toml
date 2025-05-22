@@ -1,0 +1,9 @@
+[project]
+name = "tg2pdf"
+version = "0.1.0"
+description = "Converts Telegram posts to pdf"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "telethon>=1.40.0",
+]
