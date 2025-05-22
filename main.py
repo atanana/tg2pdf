@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import os
 import asyncio
 import re
+from datetime import datetime
 from exporter import export_markdown_to_pdf
 from telegram_downloader import TelegramDownloader
 
@@ -32,6 +33,21 @@ def parse_telegram_link(link: str) -> tuple[str, int]:
     return channel_name, message_id
 
 
+def generate_output_filename(channel_name: str, message_id: int) -> str:
+    """
+    Generate output filename with datetime and channel name
+    
+    Args:
+        channel_name (str): Name of the Telegram channel
+        message_id (int): Message ID
+        
+    Returns:
+        str: Generated filename
+    """
+    current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+    return f"outputs/{current_time}_{channel_name}_{message_id}.pdf"
+
+
 async def main():
     # Load environment variables
     load_dotenv()
@@ -51,7 +67,11 @@ async def main():
         
         # Download the message
         message = await downloader.get_message(channel_name, message_id)
-        export_markdown_to_pdf(message.text, "output.pdf")
+        
+        # Generate output filename and export to PDF
+        output_file = generate_output_filename(channel_name, message_id)
+        export_markdown_to_pdf(message.text, output_file)
+        print(f"Message exported to: {output_file}")
         
     except ValueError as e:
         print(f"Invalid link format: {str(e)}")
