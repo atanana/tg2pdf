@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import os
 import asyncio
 import re
+from exporter import export_markdown_to_pdf
 from telegram_downloader import TelegramDownloader
 
 
@@ -50,7 +51,7 @@ async def main():
         
         # Download the message
         message = await downloader.get_message(channel_name, message_id)
-        print(f"Message text: {message.text}")
+        export_markdown_to_pdf(message.text, "output.pdf")
         
     except ValueError as e:
         print(f"Invalid link format: {str(e)}")

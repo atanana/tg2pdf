@@ -5,6 +5,8 @@ description = "Converts Telegram posts to pdf"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "markdown>=3.8",
     "python-dotenv>=1.1.0",
     "telethon>=1.40.0",
+    "weasyprint>=65.1",
 ]
