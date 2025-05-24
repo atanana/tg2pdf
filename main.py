@@ -34,7 +34,7 @@ def parse_telegram_link(link: str) -> tuple[str, int]:
     return channel_name, message_id
 
 
-def generate_output_filename() -> str:
+def generate_output_filename(channel_name: str) -> str:
     """
     Generate output filename with current datetime
     
@@ -42,7 +42,7 @@ def generate_output_filename() -> str:
         str: Generated filename
     """
     current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
-    return f"outputs/{current_time}.pdf"
+    return f"outputs/{current_time}_{channel_name}.pdf"
 
 
 async def process_links(downloader: TelegramDownloader, links: list[str]) -> list[tuple[str, str]]:
@@ -63,9 +63,7 @@ async def process_links(downloader: TelegramDownloader, links: list[str]) -> lis
             channel_name, message_id = parse_telegram_link(link)
             message = await downloader.get_message(channel_name, message_id)
             
-            # Add channel name as a header to the message
-            formatted_message = f"# {channel_name}\n\n{message.text}\n\n---\n\n"
-            messages.append((channel_name, formatted_message))
+            messages.append((channel_name, message.text))
             print(f"Successfully processed: {link}")
             
         except ValueError as e:
@@ -102,7 +100,7 @@ async def main():
             combined_text = "".join(msg[1] for msg in messages)
             
             # Generate output filename and export to PDF
-            output_file = generate_output_filename()
+            output_file = generate_output_filename(messages[0][0])
             export_markdown_to_pdf(combined_text, output_file)
             print(f"\nAll messages exported to: {output_file}")
         else:
